@@ -2,37 +2,37 @@ import 'package:flutter/material.dart';
 
 void main() {
   // runApp(const MyApp());
-   runApp(const App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
   const App({super.key});
 
- @override
-Widget build(BuildContext context) {
-  return MaterialApp(
-    title: 'Sandwich Shop App',
-    home: Scaffold(
-      appBar: AppBar(title: const Text('Sandwich Counter')),
-      body: Center(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(16.0),
-          color: Colors.grey,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(child: OrderItemDisplay(3, 'BLT')),
-              Expanded(child: OrderItemDisplay(5, 'Club')),
-              Expanded(child: OrderItemDisplay(2, 'Veggie')),
-            ],
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sandwich Shop App',
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Sandwich Counter')),
+        body: Center(
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(16.0),
+            color: Colors.deepPurple,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: OrderItemDisplay(3, 'BLT')),
+                Expanded(child: OrderItemDisplay(5, 'Club')),
+                Expanded(child: OrderItemDisplay(2, 'Veggie')),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
 
 class OrderItemDisplay extends StatelessWidget {
@@ -43,8 +43,15 @@ class OrderItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
-}
+    return Text(
+      '$quantity $itemType sandwich(es): ${'🥪' * quantity}',
+      style: const TextStyle(
+        color: Colors.green,
+        fontWeight: FontWeight.bold,
+        fontSize: 18.0,
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
