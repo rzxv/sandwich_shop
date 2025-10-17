@@ -19,9 +19,15 @@ Widget build(BuildContext context) {
           alignment: Alignment.center,
           padding: const EdgeInsets.all(16.0),
           color: Colors.grey,
-          height: 200.0,
-          width: 300.0,
-          child: const OrderItemDisplay(5, 'Footlong'),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: OrderItemDisplay(3, 'BLT')),
+              Expanded(child: OrderItemDisplay(5, 'Club')),
+              Expanded(child: OrderItemDisplay(2, 'Veggie')),
+            ],
+          ),
         ),
       ),
     ),
