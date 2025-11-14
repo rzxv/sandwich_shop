@@ -49,7 +49,14 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // We implement the Scaffold and UI structure here
+    final VoidCallback? increaseCallback = _quantity < widget.maxQuantity
+        ? _increaseQuantity
+        : null;
+
+    final VoidCallback? decreaseCallback = _quantity > 0
+        ? _decreaseQuantity
+        : null;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Sandwich Counter')),
       body: Center(
@@ -59,19 +66,24 @@ class _OrderScreenState extends State<OrderScreen> {
             // We use the mutable state variable _quantity
             OrderItemDisplay(_quantity, 'Footlong'),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                StyledButton(
-                  onPressed: _increaseQuantity,
-                  text: 'Add',
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                Expanded(
+                  child: StyledButton(
+                    onPressed: increaseCallback, // Use conditional callback
+                    text: 'Add',
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
-                StyledButton(
-                  onPressed: _decreaseQuantity,
-                  text: 'Remove',
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: StyledButton(
+                    onPressed: decreaseCallback, // Use conditional callback
+                    text: 'Remove',
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -83,7 +95,7 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class StyledButton extends StatelessWidget {
-  final VoidCallback onPressed; // The function to call when pressed
+  final VoidCallback? onPressed; // The function to call when pressed
   final String text;
   final Color backgroundColor;
   final Color foregroundColor;
