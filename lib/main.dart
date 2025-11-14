@@ -40,6 +40,31 @@ class App extends StatelessWidget {
   }
 }
 
+
+class OrderScreen extends StatefulWidget {
+  // maxQuantity is immutable and defines the limit
+  final int maxQuantity; 
+  
+  const OrderScreen({super.key, this.maxQuantity = 10});
+
+  @override
+  State<OrderScreen> createState() {
+    return _OrderScreenState();
+  }
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  // _quantity is the private, mutable state variable [9]
+  int _quantity = 0; 
+  
+  @override
+  Widget build(BuildContext context) {
+    // We start by returning a placeholder [10]
+    return const Placeholder(); 
+  }
+}
+
+
 class OrderItemDisplay extends StatelessWidget {
   final int quantity;
   final String itemType;
