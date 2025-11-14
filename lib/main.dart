@@ -11,7 +11,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Sandwich Shop App',
-      // Use OrderScreen as home, setting maxQuantity to 5 [13]
+      // Use OrderScreen as home, setting maxQuantity to 5
       home: OrderScreen(maxQuantity: 5),
     );
   }
@@ -33,42 +33,42 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
 
   void _increaseQuantity() {
-    // Check against the immutable maxQuantity accessed via 'widget' [16]
+    // Check against the immutable maxQuantity accessed via 'widget'
     if (_quantity < widget.maxQuantity) {
-      // Must call setState() to trigger a UI rebuild [15]
+      // Must call setState() to trigger a UI rebuild
       setState(() => _quantity++);
     }
   }
 
   void _decreaseQuantity() {
     if (_quantity > 0) {
-      // Must call setState() to trigger a UI rebuild [15]
+      // Must call setState() to trigger a UI rebuild
       setState(() => _quantity--);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // We implement the Scaffold and UI structure here [10]
+    // We implement the Scaffold and UI structure here
     return Scaffold(
       appBar: AppBar(title: const Text('Sandwich Counter')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // We use the mutable state variable _quantity [12]
+            // We use the mutable state variable _quantity
             OrderItemDisplay(_quantity, 'Footlong'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  // Buttons still just print messages for now
-                  onPressed: () => print('Add button pressed!'),
+                  // Link onPressed directly to the function reference
+                  onPressed: _increaseQuantity,
                   child: const Text('Add'),
                 ),
                 ElevatedButton(
-                  // Buttons still just print messages for now
-                  onPressed: () => print('Remove button pressed!'),
+                  // Link onPressed directly to the function reference
+                  onPressed: _decreaseQuantity,
                   child: const Text('Remove'),
                 ),
               ],
