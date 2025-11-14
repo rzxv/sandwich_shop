@@ -32,6 +32,21 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
 
+  void _increaseQuantity() {
+    // Check against the immutable maxQuantity accessed via 'widget' [16]
+    if (_quantity < widget.maxQuantity) {
+      // Must call setState() to trigger a UI rebuild [15]
+      setState(() => _quantity++);
+    }
+  }
+
+  void _decreaseQuantity() {
+    if (_quantity > 0) {
+      // Must call setState() to trigger a UI rebuild [15]
+      setState(() => _quantity--);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // We implement the Scaffold and UI structure here [10]
