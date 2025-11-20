@@ -38,6 +38,7 @@ class _OrderScreenState extends State<OrderScreen> {
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
+  bool _isToasted = false;
 
   @override
   void initState() {
@@ -114,6 +115,7 @@ class _OrderScreenState extends State<OrderScreen> {
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
+              isToasted: _isToasted,
             ),
             const SizedBox(height: 20),
             Row(
@@ -122,6 +124,19 @@ class _OrderScreenState extends State<OrderScreen> {
                 const Text('six-inch', style: normalText),
                 Switch(value: _isFootlong, onChanged: _onSandwichTypeChanged),
                 const Text('footlong', style: normalText),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('untoasted', style: normalText),
+                Switch(
+                  value: _isToasted,
+                  onChanged: (value) {
+                    setState(() => _isToasted = value);
+                  },
+                ),
+                const Text('toasted', style: normalText),
               ],
             ),
             const SizedBox(height: 10),
@@ -203,6 +218,7 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final BreadType breadType;
   final String orderNote;
+  final bool isToasted;
 
   const OrderItemDisplay({
     super.key,
@@ -210,12 +226,14 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
+    required this.isToasted,
   });
 
   @override
   Widget build(BuildContext context) {
+    String toastedStatus = isToasted ? ' (toasted)' : '';
     String displayText =
-        '$quantity ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
+        '$quantity ${breadType.name} $itemType sandwich(es)$toastedStatus: ${'🥪' * quantity}';
 
     return Column(
       children: [
