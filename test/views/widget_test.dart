@@ -139,6 +139,32 @@ void main() {
       // Final state: untoasted
       expect(find.textContaining('(toasted)'), findsNothing);
     });
+
+    testWidgets('updates price when quantity or size changes', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(const App());
+
+      // Initial state: 1 footlong -> £11.00
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+      await tester.pump();
+      expect(find.text('Total Price: £11.00'), findsOneWidget);
+
+      // 2 footlongs -> £22.00
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+      await tester.pump();
+      expect(find.text('Total Price: £22.00'), findsOneWidget);
+
+      // 2 six-inch -> £14.00
+      await tester.tap(find.byKey(const Key('sandwich_type_switch')));
+      await tester.pump();
+      expect(find.text('Total Price: £14.00'), findsOneWidget);
+
+      // 1 six-inch -> £7.00
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Remove'));
+      await tester.pump();
+      expect(find.text('Total Price: £7.00'), findsOneWidget);
+    });
   });
 
   group('StyledButton', () {

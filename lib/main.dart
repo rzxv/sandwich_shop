@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/repositories/pricing_repository.dart';
 import 'views/app_styles.dart';
 import 'repositories/order_repository.dart';
 
@@ -35,6 +36,7 @@ class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository = OrderRepository(
     maxQuantity: widget.maxQuantity,
   );
+  final PricingRepository _pricingRepository = PricingRepository();
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
@@ -104,6 +106,11 @@ class _OrderScreenState extends State<OrderScreen> {
       noteForDisplay = _notesController.text;
     }
 
+    double totalPrice = _pricingRepository.calculatePrice(
+      quantity: _orderRepository.quantity,
+      isFootlong: _isFootlong,
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text('Sandwich Counter', style: heading1)),
       body: Center(
@@ -117,6 +124,8 @@ class _OrderScreenState extends State<OrderScreen> {
               orderNote: noteForDisplay,
               isToasted: _isToasted,
             ),
+            const SizedBox(height: 20),
+            Text('Total Price: £${totalPrice.toStringAsFixed(2)}', style: normalText),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
