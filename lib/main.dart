@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sandwich_shop/views/app_styles.dart';
+import 'package:sandwich_shop/repositories/order_repository.dart';
 import 'package:sandwich_shop/repositories/pricing_repository.dart';
-import 'views/app_styles.dart';
-import 'repositories/order_repository.dart';
 
 enum BreadType { white, wheat, wholemeal }
 
@@ -33,18 +33,18 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  late final OrderRepository _orderRepository = OrderRepository(
-    maxQuantity: widget.maxQuantity,
-  );
-  final PricingRepository _pricingRepository = PricingRepository();
+  late final OrderRepository _orderRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
-  BreadType _selectedBreadType = BreadType.white;
   bool _isToasted = false;
+  BreadType _selectedBreadType = BreadType.white;
+  late final PricingRepository _pricingRepository;
 
   @override
   void initState() {
     super.initState();
+    _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
+    _pricingRepository = PricingRepository();
     _notesController.addListener(() {
       setState(() {});
     });
@@ -74,6 +74,10 @@ class _OrderScreenState extends State<OrderScreen> {
     setState(() => _isFootlong = value);
   }
 
+  void _onToastedChanged(bool value) {
+    setState(() => _isToasted = value);
+  }
+
   void _onBreadTypeSelected(BreadType? value) {
     if (value != null) {
       setState(() => _selectedBreadType = value);
@@ -94,6 +98,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double totalPrice = _pricingRepository.calculatePrice(
+      quantity: _orderRepository.quantity,
+      isFootlong: _isFootlong,
+    );
+
     String sandwichType = 'footlong';
     if (!_isFootlong) {
       sandwichType = 'six-inch';
@@ -105,11 +114,6 @@ class _OrderScreenState extends State<OrderScreen> {
     } else {
       noteForDisplay = _notesController.text;
     }
-
-    double totalPrice = _pricingRepository.calculatePrice(
-      quantity: _orderRepository.quantity,
-      isFootlong: _isFootlong,
-    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Sandwich Counter', style: heading1)),
@@ -125,7 +129,10 @@ class _OrderScreenState extends State<OrderScreen> {
               isToasted: _isToasted,
             ),
             const SizedBox(height: 20),
-            Text('Total Price: £${totalPrice.toStringAsFixed(2)}', style: normalText),
+            Text(
+              'Total Price: £${totalPrice.toStringAsFixed(2)}',
+              style: heading2,
+            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -139,6 +146,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 const Text('footlong', style: normalText),
               ],
             ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -146,9 +154,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 Switch(
                   key: const Key('toasted_switch'),
                   value: _isToasted,
-                  onChanged: (value) {
-                    setState(() => _isToasted = value);
-                  },
+                  onChanged: _onToastedChanged,
                 ),
                 const Text('toasted', style: normalText),
               ],
@@ -245,9 +251,11 @@ class OrderItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String toastedStatus = isToasted ? ' (toasted)' : '';
-    String displayText =
-        '$quantity ${breadType.name} $itemType sandwich(es)$toastedStatus: ${'🥪' * quantity}';
+    String displayText = '$quantity ${breadType.name} $itemType sandwich(es)';
+    if (isToasted) {
+      displayText += ' (toasted)';
+    }
+    displayText += ': ${'🥪' * quantity}';
 
     return Column(
       children: [
