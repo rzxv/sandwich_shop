@@ -113,7 +113,13 @@ class _OrderScreenState extends State<OrderScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sandwich Counter', style: heading1)),
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        title: const Text('Sandwich Counter', style: heading1),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

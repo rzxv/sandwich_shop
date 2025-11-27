@@ -16,7 +16,7 @@ void main() {
       isFootlong: true, // Footlong
       breadType: BreadType.wheat,
     );
-    final sandwich1_variant = Sandwich(
+    final sandwich1Variant = Sandwich(
       type: SandwichType.veggieDelight,
       isFootlong: false, // 6-inch, same as sandwich1
       breadType: BreadType.wholemeal, // Different bread
@@ -67,7 +67,7 @@ void main() {
     test('add different sandwich variants creates separate entries', () {
       // Act
       cart.add(sandwich1);
-      cart.add(sandwich1_variant);
+      cart.add(sandwich1Variant);
 
       // Assert
       expect(cart.totalItemCount, 2);
