@@ -12,7 +12,7 @@ void main() {
       breadType: BreadType.white,
     );
     final sandwich2 = Sandwich(
-      type: SandwichType.chickenTeriyaki,
+      type: SandwichType.teriyakiChicken,
       isFootlong: true, // Footlong
       breadType: BreadType.wheat,
     );

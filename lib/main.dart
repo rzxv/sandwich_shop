@@ -176,15 +176,30 @@ class _OrderScreenState extends State<OrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 300,
-                child: Image.asset(
+                height: 400, // Increased height
+                child: Container( // Added a container for the border
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: Image.asset(
+                    _getCurrentImagePath(),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Text('Image not found', style: normalText),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center( // Added a text widget to display the image path
+                child: Text(
                   _getCurrentImagePath(),
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Text('Image not found', style: normalText),
-                    );
-                  },
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 20),
