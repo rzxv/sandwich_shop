@@ -16,6 +16,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(const App());
+      await tester.ensureVisible(find.text('1'));
       expect(find.text('1'), findsOneWidget);
     });
 
@@ -23,6 +24,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(const App());
+      await tester.ensureVisible(find.byIcon(Icons.add));
       await tester.tap(find.byIcon(Icons.add));
       await tester.pump();
       expect(find.text('2'), findsOneWidget);
@@ -32,9 +34,11 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(const App());
+      await tester.ensureVisible(find.byIcon(Icons.add));
       await tester.tap(find.byIcon(Icons.add));
       await tester.pump();
       expect(find.text('2'), findsOneWidget);
+      await tester.ensureVisible(find.byIcon(Icons.remove));
       await tester.tap(find.byIcon(Icons.remove));
       await tester.pump();
       expect(find.text('1'), findsOneWidget);
@@ -42,6 +46,7 @@ void main() {
 
     testWidgets('does not decrement below zero', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      await tester.ensureVisible(find.byIcon(Icons.remove));
       await tester.tap(find.byIcon(Icons.remove));
       await tester.pump();
       expect(find.text('0'), findsOneWidget);
@@ -56,6 +61,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(const App());
+      await tester.ensureVisible(find.byType(DropdownMenu<BreadType>));
       await tester.tap(find.byType(DropdownMenu<BreadType>));
       await tester.pumpAndSettle();
       await tester.tap(find.text('wheat').last);
@@ -66,10 +72,48 @@ void main() {
     testWidgets('toggles between six-inch and footlong with Switch',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+       await tester.ensureVisible(find.byType(Switch));
       await tester.tap(find.byType(Switch));
       await tester.pump();
     });
 
+  });
+
+  group('OrderScreen - Cart Summary', () {
+    testWidgets('is initially empty', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      expect(find.text('Items: 0'), findsOneWidget);
+      expect(find.text('Total: \$0.00'), findsOneWidget);
+    });
+
+    testWidgets('updates when items are added to the cart', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+
+      // Verify initial state
+      expect(find.text('Items: 0'), findsOneWidget);
+      expect(find.text('Total: \$0.00'), findsOneWidget);
+
+      // Find and tap the "Add to Cart" button
+      await tester.ensureVisible(find.widgetWithText(StyledButton, 'Add to Cart'));
+      await tester.tap(find.widgetWithText(StyledButton, 'Add to Cart'));
+      await tester.pump();
+
+      // Verify updated state (1 footlong veggie, default)
+      expect(find.text('Items: 1'), findsOneWidget);
+      expect(find.text('Total: \$11.00'), findsOneWidget);
+
+      // Change quantity and add again
+      await tester.ensureVisible(find.byIcon(Icons.add));
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      await tester.ensureVisible(find.widgetWithText(StyledButton, 'Add to Cart'));
+      await tester.tap(find.widgetWithText(StyledButton, 'Add to Cart'));
+      await tester.pump();
+
+      // Verify updated state (1 + 2 = 3 items, 11.00 + 22.00 = 33.00)
+      expect(find.text('Items: 3'), findsOneWidget);
+      expect(find.text('Total: \$33.00'), findsOneWidget);
+    });
   });
 
   group('StyledButton', () {
@@ -104,10 +148,12 @@ void main() {
       await tester.pumpWidget(const App());
 
       // Verify that the initial quantity is 1.
+      await tester.ensureVisible(find.text('1'));
       expect(find.text('1'), findsOneWidget);
 
       // Find the "Add to Cart" button.
       final addToCartButton = find.widgetWithText(StyledButton, 'Add to Cart');
+      await tester.ensureVisible(addToCartButton);
       expect(addToCartButton, findsOneWidget);
 
       // Tap the "Add to Cart" button.
@@ -125,6 +171,7 @@ void main() {
       await tester.pumpWidget(const App());
 
       // Decrease the quantity to 0.
+      await tester.ensureVisible(find.byIcon(Icons.remove));
       await tester.tap(find.byIcon(Icons.remove));
       await tester.pump();
 

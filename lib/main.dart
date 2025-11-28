@@ -264,6 +264,18 @@ class _OrderScreenState extends State<OrderScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Text('Items: ${_cart.totalItemCount}', style: normalText),
+              Text('Total: \$${_cart.totalPrice.toStringAsFixed(2)}', style: normalText),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
