@@ -1,6 +1,6 @@
 enum BreadType { white, wheat, wholemeal }
 
-enum SandwichType { veggieDelight, chickenTeriyaki, tunaMelt, meatballMarinara }
+enum SandwichType { veggieDelight, teriyakiChicken, beefSpecial, spicyItalian }
 
 class Sandwich {
   final SandwichType type;
@@ -17,12 +17,12 @@ class Sandwich {
     switch (type) {
       case SandwichType.veggieDelight:
         return 'Veggie Delight';
-      case SandwichType.chickenTeriyaki:
-        return 'Chicken Teriyaki';
-      case SandwichType.tunaMelt:
-        return 'Tuna Melt';
-      case SandwichType.meatballMarinara:
-        return 'Meatball Marinara';
+      case SandwichType.teriyakiChicken:
+        return 'Teriyaki Chicken';
+      case SandwichType.beefSpecial:
+        return 'Beef Special';
+      case SandwichType.spicyItalian:
+        return 'Spicy Italian';
     }
   }
 
