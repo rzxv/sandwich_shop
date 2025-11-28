@@ -53,7 +53,7 @@ class _OrderScreenState extends State<OrderScreen> {
     super.dispose();
   }
 
-  void _addToCart() {
+  void _addToCart(BuildContext context) {
     if (_quantity > 0) {
       final Sandwich sandwich = Sandwich(
         type: _selectedSandwichType,
@@ -74,15 +74,15 @@ class _OrderScreenState extends State<OrderScreen> {
       String confirmationMessage =
           'Added $_quantity $sizeText ${sandwich.name} sandwich(es) on ${_selectedBreadType.name} bread to cart';
 
-      debugPrint(confirmationMessage);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(confirmationMessage),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.fromLTRB(15, 5, 15, 100),
+        ),
+      );
     }
-  }
-
-  VoidCallback? _getAddToCartCallback() {
-    if (_quantity > 0) {
-      return _addToCart;
-    }
-    return null;
   }
 
   List<DropdownMenuEntry<SandwichType>> _buildSandwichTypeEntries() {
@@ -169,15 +169,29 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sandwich Counter', style: heading1)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 32,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.fastfood, size: 32);
+              },
+            ),
+            const SizedBox(width: 8),
+            const Text('Sandwich Counter', style: heading1),
+          ],
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 400, // Increased height
-                child: Container( // Added a container for the border
+                height: 200,
+                child: Container( 
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.grey,
@@ -193,13 +207,6 @@ class _OrderScreenState extends State<OrderScreen> {
                       );
                     },
                   ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Center( // Added a text widget to display the image path
-                child: Text(
-                  _getCurrentImagePath(),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 20),
@@ -247,7 +254,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
               const SizedBox(height: 20),
               StyledButton(
-                onPressed: _getAddToCartCallback(),
+                onPressed: _quantity > 0 ? () => _addToCart(context) : null,
                 icon: Icons.add_shopping_cart,
                 label: 'Add to Cart',
                 backgroundColor: Colors.green,
